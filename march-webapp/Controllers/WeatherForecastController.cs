@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace march_webapp.Controllers
 {
-    [Authorize]
+    
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -36,7 +36,7 @@ namespace march_webapp.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+            //HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
 
             _logger.LogInformation("Web api Start Get method invoke");
             var rng = new Random();
