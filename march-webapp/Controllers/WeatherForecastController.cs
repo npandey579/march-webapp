@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Azure.Messaging.ServiceBus;
+using Microsoft.Identity.Web.Resource;
+using Microsoft.AspNetCore.Authorization;
 
 namespace march_webapp.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -16,6 +19,8 @@ namespace march_webapp.Controllers
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
+        static readonly string[] scopeRequiredByApi = new string[] { "access_as_user" };
+
 
         private readonly ILogger<WeatherForecastController> _logger;
         static string connectionString = "Endpoint=sb://marchsbnamespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=BudeDVOB1pa7ROvOl181cj5cbgPnWIZaERUpISKHXX4=";
@@ -26,9 +31,13 @@ namespace march_webapp.Controllers
             _logger = logger;
         }
 
+
+        
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+
             _logger.LogInformation("Web api Start Get method invoke");
             var rng = new Random();
             _logger.LogInformation("Web api  End Get method invokee", rng);
